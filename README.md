@@ -1,45 +1,43 @@
 # scope-bucket
 
-Personal Scoop bucket.
+个人自用的 Scoop bucket，桶名 `lu`。
 
 ```
-bucket/          manifests, flat
-deprecated/      retired manifests
-bin/             scoop's scripts + schema check
+bucket/          清单，扁平存放
+deprecated/      已下架的清单
+bin/             checkver/checkhashes 等脚本 + 校验脚本
 lib/             redirect.ps1
 ```
 
-## Add an app
+## 加一个应用
 
-1. Write `bucket/<app>.json` (copy `zoxide.json`).
+1. 新建 `bucket/<app>.json`（照抄 `zoxide.json` 改）。
 2. `.\bin\checkhashes.ps1 <app> -Update`
 3. `.\bin\checkver.ps1 <app>`
 
-## Update
+## 更新版本
 
-Bump the versions in the manifests — this is what you push:
+`update.ps1` 只改清单里的版本号，这就是要推到 GitHub 的内容：
 
 ```
-.\bin\update.ps1            # bump, validate, show the diff, stop
-.\bin\update.ps1 -Commit    # bump, validate, commit
-.\bin\update.ps1 -Push      # bump, commit, push
-.\bin\update.ps1 -Preview   # report what changed, then undo the edits
-.\bin\update.ps1 -Install   # also update the apps on this machine
+.\bin\update.ps1              # 改清单、校验、打印 diff，然后停下
+.\bin\update.ps1 -Commit      # 改清单、校验、提交
+.\bin\update.ps1 -Push        # 改清单、校验、提交、推送
+.\bin\update.ps1 -Preview     # 只报告改了哪些，然后撤销改动
+.\bin\update.ps1 -Install     # 顺带升级本机已装的程序
 ```
 
-A bare run leaves the edits in the working tree so you can look at them first;
-`-Commit` picks up whatever the previous run left behind. `-Install` pulls
-`D:\Scoop\buckets\lu` and runs `scoop update lu/<app>`, so skipping it leaves
-your local copy alone. CI runs the same check every 2 hours and commits on its
-own.
+不带参数时改动留在工作区，先看过再执行 `-Commit`；`-Commit` 会接住上一次运行
+留下的改动。`-Install` 会先 `git pull` 本地克隆再 `scoop update lu/<app>`，不加就
+只动清单、不动本机。CI 每 2 小时跑一次同样的检查并自动提交。
 
-## Retire an app
+## 下架一个应用
 
-Move the manifest to `deprecated/`.
+把清单移到 `deprecated/`。
 
-## Data outside the app folder
+## 数据不在应用目录里的情况
 
-Apps that scatter data on C: get a link into `persist`:
+有些应用把数据硬写在 C 盘，用 `redirect.ps1` 把它链接到 `persist`：
 
 ```json
 "pre_install": [
@@ -50,16 +48,22 @@ Apps that scatter data on C: get a link into `persist`:
 ]
 ```
 
-`-Paths` takes any absolute path; targets are derived automatically under
-`$persist_dir`. Add `=> relative\dir` to choose one yourself. Check with
-`pwsh lib\redirect.ps1 -List -PersistDir <persist dir>`.
-
-## Local testing
+`-Paths` 接受任意绝对路径，目标默认推导到 `$persist_dir` 下；写成
+`"源路径 => 相对目录"` 可以自己指定。查看现状：
 
 ```
-scoop bucket add lu file:///D:/CODE/mine/scope-bucket
+pwsh lib\redirect.ps1 -List -PersistDir <persist 目录>
 ```
 
-Needs at least one commit. After editing, `cd D:\Scoop\buckets\lu; git pull --ff-only`.
+## 本地测试
 
-Install by full name (`scoop install lu/zoxide`) — `main` has a `zoxide` too and wins on a bare name.
+把仓库路径换成你自己的：
+
+```
+scoop bucket add lu file:///D:/path/to/scope-bucket
+```
+
+仓库至少要有一个提交才能被 `bucket add`。改完之后在桶目录里
+`git pull --ff-only` 同步。
+
+装的时候写全名（`scoop install lu/zoxide`）——`main` 里也有 `zoxide`，裸名会解析到它。
