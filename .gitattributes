@@ -1,0 +1,2 @@
+# Scoop is Windows-only; CRLF in the working tree, LF in the index.
+* text=auto eol=crlf

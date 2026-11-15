@@ -1,0 +1,36 @@
+{
+    "version": "18.24.8",
+    "description": "Sync, search and backup shell history",
+    "homepage": "https://atuin.sh",
+    "license": "MIT",
+    "notes": [
+        "To enable history search, add the following to your PowerShell profile:",
+        "Invoke-Expression (& { (atuin init powershell --disable-up-arrow | Out-String) })"
+    ],
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/atuinsh/atuin/releases/download/v18.24.8/atuin-x86_64-pc-windows-msvc.zip",
+            "hash": "f6ff4e13feed0e49853618ab5f1ec849ccbb34dcab2df711c85d5f0333d8e717"
+        }
+    },
+    "bin": "atuin.exe",
+    "env_set": {
+        "ATUIN_HOME": "$persist_dir\\home"
+    },
+    "pre_install": [
+        "& \"$bucketsdir\\$bucket\\lib\\redirect.ps1\" -Setup -Paths \"$env:USERPROFILE\\.config\\atuin => home\", \"$env:USERPROFILE\\.local\\share\\atuin => home\\data\", \"$env:USERPROFILE\\.atuin => home\""
+    ],
+    "pre_uninstall": [
+        "& \"$bucketsdir\\$bucket\\lib\\redirect.ps1\" -Teardown"
+    ],
+    "checkver": {
+        "github": "https://github.com/atuinsh/atuin"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/atuinsh/atuin/releases/download/v$version/atuin-x86_64-pc-windows-msvc.zip"
+            }
+        }
+    }
+}

@@ -1,0 +1,51 @@
+name: Update manifests
+
+on:
+  workflow_dispatch:
+  schedule:
+    # every 2 hours, off the top of the hour to dodge the runner rush
+    - cron: '13 */2 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-manifests
+  cancel-in-progress: false
+
+jobs:
+  checkver:
+    name: checkver
+    runs-on: windows-latest
+    steps:
+      - name: Checkout bucket
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Same trick as the upstream bucket CI: point SCOOP_HOME at a Scoop
+      # checkout instead of installing Scoop on the runner. bin/checkver.ps1
+      # only falls back to `scoop prefix scoop` when that var is unset.
+      - name: Checkout Scoop
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ScoopInstaller/Scoop
+          path: scoop_core
+
+      - name: Bump versions and hashes
+        shell: pwsh
+        env:
+          SCOOP_HOME: ${{ github.workspace }}\scoop_core
+          SCOOP_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./bin/checkver.ps1 -Update -SkipUpdated
+
+      - name: Commit and push
+        shell: pwsh
+        run: |
+          if (!(git status --porcelain bucket)) {
+            Write-Host 'No manifest updates.'
+            exit 0
+          }
+          git config user.name  'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add bucket
+          git commit -m 'chore: update manifests'
+          git push
