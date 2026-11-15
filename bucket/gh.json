@@ -21,7 +21,7 @@
     "env_set": {
         "GH_CONFIG_DIR": "$persist_dir\\AppData\\Roaming\\GitHub CLI"
     },
-    "pre_install": "& \"$bucketsdir\\$bucket\\lib\\redirect.ps1\" -Setup -Paths \"$env:APPDATA\\GitHub CLI => AppData\\Roaming\\GitHub CLI\"",
+    "pre_install": "& \"$bucketsdir\\$bucket\\lib\\redirect.ps1\" -Setup -Paths \"$env:APPDATA\\GitHub CLI => AppData\\Roaming\\GitHub CLI\", \"$env:LOCALAPPDATA\\GitHub CLI => AppData\\Local\\GitHub CLI\"",
     "pre_uninstall": "& \"$bucketsdir\\$bucket\\lib\\redirect.ps1\" -Teardown",
     "checkver": {
         "github": "https://github.com/cli/cli"

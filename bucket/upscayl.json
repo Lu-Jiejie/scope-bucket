@@ -1,0 +1,38 @@
+{
+    "version": "2.15.0",
+    "description": "A free and open source AI image upscaler.",
+    "homepage": "https://github.com/upscayl/upscayl",
+    "license": "AGPL-3.0",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/upscayl/upscayl/releases/download/v2.15.0/upscayl-2.15.0-win.exe#/dl.7z",
+            "hash": "sha512:eaf3b4b71364ee4db561a4d7727f3acf000c9e7ef5e9e1e320c67cf446f84f9cfd1bfc42a9e7d6aa55fa40fcf42aeb35e6b928eccfc7ac6370da39f51f03b148"
+        }
+    },
+    "extract_dir": "$PLUGINSDIR",
+    "pre_install": [
+        "Expand-7zipArchive \"$dir\\app-64.7z\" \"$dir\" -Removal",
+        "& \"$bucketsdir\\$bucket\\lib\\redirect.ps1\" -Setup -Paths \"$env:APPDATA\\Upscayl\""
+    ],
+    "pre_uninstall": [
+        "& \"$bucketsdir\\$bucket\\lib\\redirect.ps1\" -Teardown"
+    ],
+    "shortcuts": [
+        [
+            "Upscayl.exe",
+            "Upscayl"
+        ]
+    ],
+    "checkver": "github",
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/upscayl/upscayl/releases/download/v$version/upscayl-$version-win.exe#/dl.7z"
+            }
+        },
+        "hash": {
+            "url": "$baseurl/latest.yml",
+            "regex": "sha512:\\s$base64"
+        }
+    }
+}
