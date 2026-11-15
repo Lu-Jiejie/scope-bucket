@@ -1,21 +1,8 @@
-# Redirects places a program hardcodes on C: (usually under %APPDATA%) into the
-# app's persist dir, so data the program writes to C: really lands on the Scoop
-# root.
+# Links places a program hardcodes on C: into the app's persist dir.
 #
 # Manifest usage:
 #   "pre_install":   "& \"$bucketsdir\\$bucket\\lib\\redirect.ps1\" -Setup -Paths \"$env:APPDATA\\Vendor\\App\", \"$env:LOCALAPPDATA\\Vendor\""
 #   "pre_uninstall": "& \"$bucketsdir\\$bucket\\lib\\redirect.ps1\" -Teardown"
-#
-# The path list is written once, in pre_install. Setup records the resolved
-# links in "$persist_dir\.redirect.json" and Teardown works from that file, so
-# the list never has to be repeated and uninstall still works even if the
-# bucket layout changed in between.
-#
-# Where a link points is derived, never typed: every source is mapped under
-# $persist_dir by mirroring its path from the nearest known root, so
-# %LOCALAPPDATA%\Foo becomes $persist_dir\AppData\Local\Foo. An explicit
-# "source => relative\target" entry overrides that when a program insists on a
-# particular layout.
 [CmdletBinding()]
 param(
     [switch] $Setup,
