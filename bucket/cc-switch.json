@@ -14,7 +14,7 @@
         }
     },
     "pre_install": [
-        "& \"$bucketsdir\\$bucket\\lib\\redirect.ps1\" -Setup -Paths \"$env:USERPROFILE\\.cc-switch\", \"$env:LOCALAPPDATA\\com.ccswitch.desktop\""
+        "& \"$bucketsdir\\$bucket\\lib\\redirect.ps1\" -Setup -Paths \"$env:USERPROFILE\\.cc-switch\", \"$env:LOCALAPPDATA\\com.ccswitch.desktop\", \"$env:APPDATA\\com.ccswitch.desktop\""
     ],
     "pre_uninstall": [
         "& \"$bucketsdir\\$bucket\\lib\\redirect.ps1\" -Teardown"
