@@ -1,0 +1,26 @@
+{
+    "version": "1.6.3",
+    "description": "A multi-platform comic reader",
+    "homepage": "https://github.com/venera-app/venera",
+    "license": "GPL-3.0",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/venera-app/venera/releases/download/v1.6.3/Venera-1.6.3-windows.zip",
+            "hash": "5b83b58bc4111ee8fdc40034e0a73a236ec6bae1f891838353dd3ef81ff66aa4"
+        }
+    },
+    "shortcuts": [
+        [
+            "venera.exe",
+            "Venera"
+        ]
+    ],
+    "pre_install": "& \"$bucketsdir\\$bucket\\lib\\redirect.ps1\" -Setup -Paths \"$env:APPDATA\\com.github.wgh136\\venera => AppData\\Roaming\\com.github.wgh136\\venera\"",
+    "pre_uninstall": "& \"$bucketsdir\\$bucket\\lib\\redirect.ps1\" -Teardown",
+    "checkver": {
+        "github": "https://github.com/venera-app/venera"
+    },
+    "autoupdate": {
+        "url": "https://github.com/venera-app/venera/releases/download/v$version/Venera-$version-windows.zip"
+    }
+}

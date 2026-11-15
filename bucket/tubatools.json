@@ -1,0 +1,36 @@
+{
+    "version": "1.9.0",
+    "description": "WinUI3 toolbox with bundled utilities",
+    "homepage": "https://github.com/luolangaga/tubatools",
+    "license": "Unknown",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/luolangaga/tubatools/releases/download/v1.9.0/TubaWinUi3_Portable_1.9.0_x64.zip",
+            "hash": "f481b0d07fd7ec4fed63b02e2f0be499e08adaf53048ee52789673e444c02f4f"
+        },
+        "arm64": {
+            "url": "https://github.com/luolangaga/tubatools/releases/download/v1.9.0/TubaWinUi3_Portable_1.9.0_arm64.zip",
+            "hash": "67fa8b2de6753e1193de9384862ef759659195077b6b1327233c4f7e5d3e4b3d"
+        }
+    },
+    "extract_dir": "src",
+    "shortcuts": [
+        [
+            "TubaWinUi3.exe",
+            "TubaWinUi3"
+        ]
+    ],
+    "pre_install": "& \"$bucketsdir\\$bucket\\lib\\redirect.ps1\" -Setup -Paths \"$env:LOCALAPPDATA\\TubaWinUi3 => AppData\\Local\\TubaWinUi3\"",
+    "pre_uninstall": "& \"$bucketsdir\\$bucket\\lib\\redirect.ps1\" -Teardown",
+    "checkver": "github",
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/luolangaga/tubatools/releases/download/v$version/TubaWinUi3_Portable_$version_x64.zip"
+            },
+            "arm64": {
+                "url": "https://github.com/luolangaga/tubatools/releases/download/v$version/TubaWinUi3_Portable_$version_arm64.zip"
+            }
+        }
+    }
+}

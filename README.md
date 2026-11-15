@@ -17,8 +17,21 @@ lib/             redirect.ps1
 
 ## Update
 
-CI runs checkver every 2 hours and commits when something changed. Manually:
-`.\bin\checkver.ps1 -Update -SkipUpdated`
+Bump the versions in the manifests — this is what you push:
+
+```
+.\bin\update.ps1            # bump, validate, show the diff, stop
+.\bin\update.ps1 -Commit    # bump, validate, commit
+.\bin\update.ps1 -Push      # bump, commit, push
+.\bin\update.ps1 -Preview   # report what changed, then undo the edits
+.\bin\update.ps1 -Install   # also update the apps on this machine
+```
+
+A bare run leaves the edits in the working tree so you can look at them first;
+`-Commit` picks up whatever the previous run left behind. `-Install` pulls
+`D:\Scoop\buckets\lu` and runs `scoop update lu/<app>`, so skipping it leaves
+your local copy alone. CI runs the same check every 2 hours and commits on its
+own.
 
 ## Retire an app
 
@@ -44,7 +57,9 @@ Apps that scatter data on C: get a link into `persist`:
 ## Local testing
 
 ```
-scoop bucket add scope file:///D:/CODE/mine/scope-bucket
+scoop bucket add lu file:///D:/CODE/mine/scope-bucket
 ```
 
-Needs at least one commit. After editing, `cd D:\Scoop\buckets\scope; git pull --ff-only`.
+Needs at least one commit. After editing, `cd D:\Scoop\buckets\lu; git pull --ff-only`.
+
+Install by full name (`scoop install lu/zoxide`) — `main` has a `zoxide` too and wins on a bare name.

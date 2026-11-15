@@ -1,0 +1,24 @@
+{
+    "version": "8.0.6",
+    "description": "Shell completions for PowerShell and other shells",
+    "homepage": "https://pscompletions.abgox.com",
+    "license": "MIT",
+    "notes": "Add 'Import-Module PSCompletions' to $PROFILE.",
+    "url": "https://cdn.powershellgallery.com/packages/pscompletions.8.0.6.nupkg",
+    "hash": "2b5d1fc3c12c0951917a01082a8860adb79f2cf9534e7bf7acab26b0d9dc8858",
+    "pre_install": "Remove-Item \"$dir\\_rels\", \"$dir\\package\", \"$dir\\*Content*.xml\" -Recurse -Force -ErrorAction SilentlyContinue",
+    "env_set": {
+        "PSCOMPLETIONS_DATA_DIR": "$persist_dir\\data"
+    },
+    "psmodule": {
+        "name": "PSCompletions"
+    },
+    "persist": "data",
+    "checkver": {
+        "url": "https://www.powershellgallery.com/packages/PSCompletions",
+        "regex": "<h2>([\\d.]+)</h2>"
+    },
+    "autoupdate": {
+        "url": "https://cdn.powershellgallery.com/packages/pscompletions.$version.nupkg"
+    }
+}
