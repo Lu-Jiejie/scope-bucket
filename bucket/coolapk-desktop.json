@@ -1,0 +1,42 @@
+{
+    "version": "1.35.0",
+    "description": "酷安跨平台桌面版",
+    "homepage": "https://github.com/daimiaopeng/coolapk-desktop",
+    "license": "MIT",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/daimiaopeng/coolapk-desktop/releases/download/v1.35.0/coolapk-desktop_1.35.0_x64-setup.exe#/dl.7z",
+            "hash": "66388f125cbae30d483cd537c32b1f5287c2bd6ee5a3b6c5689c04d76933ad03"
+        },
+        "arm64": {
+            "url": "https://github.com/daimiaopeng/coolapk-desktop/releases/download/v1.35.0/coolapk-desktop_1.35.0_arm64-setup.exe#/dl.7z",
+            "hash": "bbd24e1e4480ed0c17510cc7c21dd3d957b2360d7f73c9b984ff491d6d049cea"
+        }
+    },
+    "pre_install": [
+        "Remove-Item \"$dir\\`$*\", \"$dir\\uninst*\" -Force -Recurse -ErrorAction SilentlyContinue",
+        "Get-ChildItem \"$dir\\coolapk*.exe\" | Rename-Item -NewName 'coolapk.exe'",
+        "& \"$bucketsdir\\$bucket\\lib\\redirect.ps1\" -Setup -Paths \"$env:LOCALAPPDATA\\com.coolapk.desktop => AppData\\Local\\com.coolapk.desktop\", \"$env:APPDATA\\com.coolapk.desktop => AppData\\Roaming\\com.coolapk.desktop\""
+    ],
+    "pre_uninstall": [
+        "& \"$bucketsdir\\$bucket\\lib\\redirect.ps1\" -Teardown"
+    ],
+    "bin": "coolapk.exe",
+    "shortcuts": [
+        [
+            "coolapk.exe",
+            "Coolapk"
+        ]
+    ],
+    "checkver": "github",
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/daimiaopeng/coolapk-desktop/releases/download/v$version/coolapk-desktop_$version_x64-setup.exe#/dl.7z"
+            },
+            "arm64": {
+                "url": "https://github.com/daimiaopeng/coolapk-desktop/releases/download/v$version/coolapk-desktop_$version_arm64-setup.exe#/dl.7z"
+            }
+        }
+    }
+}
